@@ -69,12 +69,6 @@
       "text": "version=$(shellos-version); echo \"Shellos $version\""
     },
     {
-      "type": "command",
-      "key": "│ ├󰘬",
-      "keyColor": "blue",
-      "text": "branch=$(shellos-version-branch); echo \"$branch\""
-    },
-    {
       "type": "kernel",
       "key": "│ ├",
       "keyColor": "blue"
@@ -96,22 +90,22 @@
     },
     {
       "type": "shell",
-      "key": "│ └",
-      "keyColor": "yellow"
+      "key": "│ ├",
+      "keyColor": "blue"
     },
     {
       "type": "terminalfont",
-      "key": "└ └",
+      "key": "│ ├",
       "keyColor": "blue"
     },
     {
       "type": "packages",
-      "key": "│ ├󰏖",
+      "key": "└ └󰏖",
       "keyColor": "blue"
     },
     {
       "type": "wmtheme",
-      "key": "│ ├󰉼",
+      "key": "└ └󰉼",
       "keyColor": "blue"
     },
     {
