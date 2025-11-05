@@ -52,6 +52,9 @@ style  = 'fg:color13'
 [git_status]
 ahead  = ' ⇡$count'
 behind = ' ⇣$count'
+conflicted = " "
+up_to_date = " "
+untracked  = "? "
 modified = '*'
 stashed = ''
 format = '[ $ahead$behind$modified ](fg:cyan)'
