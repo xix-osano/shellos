@@ -1,0 +1,94 @@
+#!/bin/bash
+# Modified shellos-snapshot: Create or restore Btrfs snapshots using Snapper and GRUB
+# For Arch Linux systems running GRUB + snapper
+
+COMMAND="$1"
+DESC="Snapshot $(date +'%Y-%m-%d %H:%M:%S')"
+SHELLOS_PATH=${SHELLOS_PATH:-$HOME/.local/share/shellos}
+
+if [[ -z $COMMAND ]]; then
+  echo "Usage: shellos-snapshot <create|restore>" >&2
+  exit 1
+fi
+
+# Ensure snapper exists
+if ! command -v snapper &>/dev/null; then
+  echo "Error: snapper not installed." >&2
+  exit 127
+fi
+
+case "$COMMAND" in
+create)
+  echo -e "\e[1;32m==> Creating system snapshot...\e[0m"
+  
+  # Get existing snapper configs (usually 'root' and maybe 'home')
+  mapfile -t CONFIGS < <(snapper --csvout list-configs | awk -F, 'NR>1 {print $1}')
+
+  for config in "${CONFIGS[@]}"; do
+    echo "→ Creating snapshot for config: $config"
+    sudo snapper -c "$config" create -c number -d "$DESC"
+  done
+
+  # Notify grub-btrfs daemon to update GRUB snapshot menu
+  if systemctl is-active --quiet grub-btrfsd.service; then
+    echo "→ Updating GRUB snapshot entries..."
+    sudo systemctl restart grub-btrfsd.service
+  fi
+
+  echo -e "\e[1;32mSnapshot created successfully. Boot menu updated.\e[0m"
+  ;;
+
+restore)
+  echo -e "\e[1;33m==> Restoring a snapshot...\e[0m"
+
+  # Pick config (if multiple exist)
+  mapfile -t CONFIGS < <(snapper --csvout list-configs | awk -F, 'NR>1 {print $1}')
+  if [[ ${#CONFIGS[@]} -gt 1 ]]; then
+    if command -v gum &>/dev/null; then
+      CONFIG=$(printf "%s\n" "${CONFIGS[@]}" | gum choose --header "Select Snapper config")
+    else
+      echo "Available configs: ${CONFIGS[*]}"
+      read -p "Enter config name: " CONFIG
+    fi
+  else
+    CONFIG="${CONFIGS[0]}"
+  fi
+
+  # Show snapshots
+  mapfile -t SNAPSHOTS < <(snapper -c "$CONFIG" list | awk 'NR>2 {print $1" - "$5" ("$3")"}')
+  if [[ ${#SNAPSHOTS[@]} -eq 0 ]]; then
+    echo "No snapshots found."
+    exit 1
+  fi
+
+  if command -v gum &>/dev/null; then
+    CHOICE=$(printf "%s\n" "${SNAPSHOTS[@]}" | gum choose --header "Select snapshot to restore")
+  else
+    printf "%s\n" "${SNAPSHOTS[@]}"
+    read -p "Enter snapshot number: " SNAP_NUM
+    CHOICE="$SNAP_NUM"
+  fi
+
+  SNAP_ID=$(echo "$CHOICE" | awk '{print $1}')
+  echo -e "\e[1;33m→ Rolling back to snapshot #$SNAP_ID...\e[0m"
+
+  # Confirm
+  if command -v gum &>/dev/null; then
+    gum confirm "This will replace your current system with snapshot #$SNAP_ID. Continue?" || exit 0
+  else
+    read -p "Confirm rollback (y/N): " CONFIRM
+    [[ "$CONFIRM" =~ ^[Yy]$ ]] || exit 0
+  fi
+
+  # Execute rollback
+  sudo snapper -c "$CONFIG" rollback "$SNAP_ID"
+
+  echo -e "\e[1;32mRollback complete. You may need to reboot.\e[0m"
+  ;;
+
+*)
+  echo "Invalid command: $COMMAND"
+  echo "Usage: shellos-snapshot <create|restore>"
+  exit 1
+  ;;
+esac

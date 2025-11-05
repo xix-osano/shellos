@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo cp ~/.local/share/shellos/default/plymouth/* /usr/share/plymouth/themes/shellos/
+sudo plymouth-set-default-theme shellos
+
+# Always rebuild initramfs with mkinitcpio
+sudo mkinitcpio -P

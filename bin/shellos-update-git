@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+echo -e "\e[32mUpdate Shellos\e[0m"
+
+git -C $SHELLOS_PATH pull --autostash
+git -C $SHELLOS_PATH diff --check || git -C $SHELLOS_PATH reset --merge

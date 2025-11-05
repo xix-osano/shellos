@@ -1,0 +1,71 @@
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+  dns=$(gum choose --height 5 --header "Select DNS provider" Cloudflare Quad9 DHCP Custom)
+else
+  dns=$1
+fi
+
+# Detect active connection name
+active_conn=$(nmcli -t -f NAME connection show --active | head -n 1)
+
+if [[ -z "$active_conn" ]]; then
+  echo "No active NetworkManager connection found!"
+  exit 1
+fi
+
+case "$dns" in
+Cloudflare)
+  echo "Switching to Cloudflare DNS..."
+  sudo nmcli connection modify "$active_conn" ipv4.ignore-auto-dns yes
+  sudo nmcli connection modify "$active_conn" ipv6.ignore-auto-dns yes
+  sudo nmcli connection modify "$active_conn" ipv4.dns "1.1.1.1 1.0.0.1"
+  sudo nmcli connection modify "$active_conn" ipv6.dns "2606:4700:4700::1111 2606:4700:4700::1001"
+  sudo nmcli connection modify "$active_conn" ipv4.dns-search ""
+  sudo nmcli connection up "$active_conn"
+  ;;
+
+Quad9)
+  # Quad9 DNS with malware blocking (9.9.9.9) and secure backups
+  sudo nmcli connection modify "$active_conn" ipv4.ignore-auto-dns yes
+  sudo nmcli connection modify "$active_conn" ipv6.ignore-auto-dns yes
+  sudo nmcli connection modify "$active_conn" ipv4.dns "9.9.9.9 149.112.112.112"
+  sudo nmcli connection modify "$active_conn" ipv6.dns "2620:fe::fe 2620:fe::9"
+  sudo nmcli connection up "$active_conn"
+;;
+
+DHCP)
+  echo "Switching to DHCP-provided DNS..."
+  sudo nmcli connection modify "$active_conn" ipv4.ignore-auto-dns no
+  sudo nmcli connection modify "$active_conn" ipv6.ignore-auto-dns no
+  sudo nmcli connection modify "$active_conn" ipv4.dns ""
+  sudo nmcli connection modify "$active_conn" ipv6.dns ""
+  sudo nmcli connection up "$active_conn"
+  ;;
+
+Custom)
+  dns_servers=$(gum input --placeholder "Enter DNS servers (space-separated)")
+  #echo "Enter your DNS servers (space-separated, e.g. '192.168.1.1 1.1.1.1'):"
+  #read -r dns_servers
+
+  if [[ -z "$dns_servers" ]]; then
+    echo "Error: No DNS servers provided."
+    exit 1
+  fi
+
+  sudo nmcli connection modify "$active_conn" ipv4.ignore-auto-dns yes
+  sudo nmcli connection modify "$active_conn" ipv4.dns "$dns_servers"
+  sudo nmcli connection up "$active_conn"
+  ;;
+esac
+
+# Optional: restart systemd-resolved if in use
+if systemctl is-active --quiet systemd-resolved; then
+  sudo systemctl restart systemd-resolved
+fi
+
+echo "DNS updated successfully for connection: $active_conn"
+sudo systemctl restart NetworkManager
+sleep 2
+echo "Current DNS settings:"
+nmcli dev show | grep -E 'IP4.DNS|IP6.DNS'

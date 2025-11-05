@@ -1,0 +1,103 @@
+#!/bin/bash
+# shellos-setup-secureboot — Configure Secure Boot with sbctl and GRUB
+
+set -e
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+print_success() {
+  echo -e "${GREEN}$1${NC}"
+}
+
+print_error() {
+  echo -e "${RED}$1${NC}"
+}
+
+print_info() {
+  echo -e "${YELLOW}$1${NC}"
+}
+
+print_info "==> Installing Secure Boot tools..."
+sudo pacman -S --needed --noconfirm sbctl sbsigntools efitools
+
+# Ensure running in EFI mode
+if [[ ! -d /sys/firmware/efi/efivars ]]; then
+  print_error "❌ EFI variables not found. You are not booted in UEFI mode."
+  print_info "   Secure Boot setup requires UEFI."
+  exit 1
+fi
+
+# Show current sbctl status
+print_info "==> Checking sbctl status..."
+sudo sbctl status || true
+
+# Block if keys already enrolled in firmware
+if sudo sbctl status | grep -q "Keys exist:.*✓"; then
+  print_error "Secure Boot keys already enrolled in firmware. Aborting to avoid key collision."
+  print_info "Clear keys in UEFI firmware before re-running this script."
+  exit 1
+fi
+
+print_info "==> Creating and enrolling Secure Boot keys..."
+# Create keys if missing
+sudo sbctl create-keys
+
+# Enroll keys if not enrolled
+if ! sudo sbctl status | grep -q "Setup Mode:.*✓"; then
+  echo "==> Enrolling keys with Microsoft compatibility..."
+  sudo sbctl enroll-keys --microsoft
+else
+  print_info "✔ Keys already enrolled."
+fi
+
+# Reinstall GRUB with TPM module (optional)
+if ! grub-install --version >/dev/null 2>&1; then
+  print_error "❌ GRUB not found. Install it first: sudo pacman -S grub"
+  exit 1
+fi
+
+print_info "==> Reinstalling GRUB with TPM module..."
+sudo grub-install --target=x86_64-efi \
+  --efi-directory=/boot \
+  --bootloader-id=GRUB \
+  --modules="tpm" \
+  --disable-shim-lock
+
+print_info "==> Verifying current signatures..."
+sudo sbctl verify || true
+
+print_info "==> Signing key EFI and kernel binaries..."
+FILES_TO_SIGN=(
+  /boot/EFI/GRUB/grubx64.efi
+  /boot/EFI/BOOT/BOOTX64.EFI
+  /boot/grub/x86_64-efi/core.efi
+  /boot/grub/x86_64-efi/grub.efi
+  /boot/vmlinuz-linux
+)
+
+# Add -lts kernel if present
+[[ -f /boot/vmlinuz-linux-lts ]] && FILES_TO_SIGN+=("/boot/vmlinuz-linux-lts")
+
+for file in "${FILES_TO_SIGN[@]}"; do
+  if [[ -f "$file" ]]; then
+    echo "   Signing: $file"
+    sudo sbctl sign -s "$file"
+  else
+    echo "   Skipping (not found): $file"
+  fi
+done
+
+print_info "==> Running verification..."
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo sbctl verify || print_error "⚠ Some binaries may not be signed yet."
+sudo sbctl sign-all || true
+
+echo
+print_success "✔ Secure Boot setup complete!"
+print_info "  Verify with: sudo sbctl status"
+print_info "  To check signatures: sudo sbctl verify"
+print_info "  On every kernel or GRUB update, EFI binaries will auto re-sign."
+print_info "  Reboot and enable Secure Boot in firmware when ready."

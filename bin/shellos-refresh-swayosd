@@ -1,0 +1,5 @@
+#!/bin/bash
+
+shellos-refresh-config swayosd/config.toml
+shellos-refresh-config swayosd/style.css
+shellos-restart-swayosd

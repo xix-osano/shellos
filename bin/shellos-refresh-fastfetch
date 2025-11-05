@@ -1,0 +1,3 @@
+#!/bin/bash
+
+shellos-refresh-config fastfetch/config.jsonc

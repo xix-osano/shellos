@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+shellos-update-time
+shellos-update-keyring
+shellos-update-available-reset
+shellos-update-system-pkgs
+shellos-migrate
+shellos-hook post-update
+shellos-update-restart

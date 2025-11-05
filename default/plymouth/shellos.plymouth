@@ -1,0 +1,11 @@
+[Plymouth Theme]
+Name=Shellos
+Description=Shellos splash screen.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/shellos
+ScriptFile=/usr/share/plymouth/themes/shellos/shellos.script
+ConsoleLogBackgroundColor=0x1a1b26
+MonospaceFont=Cantarell 11
+Font=Cantarell 11

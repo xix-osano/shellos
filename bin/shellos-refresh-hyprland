@@ -1,0 +1,7 @@
+#!/bin/bash
+
+shellos-refresh-config hypr/hyprland/autostart.conf
+shellos-refresh-config hypr/hyprland/keybindings.conf
+shellos-refresh-config hypr/hyprland/envs.conf
+shellos-refresh-config hypr/hyprland/input.conf
+shellos-refresh-config hypr/hyprland.conf
