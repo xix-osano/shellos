@@ -1,4 +1,4 @@
-@import "../omarchy/current/theme/waybar.css";
+@import "../shellos/current/theme/waybar.css";
 
 * {
   background-color: @background;
@@ -33,7 +33,7 @@
 #cpu,
 #battery,
 #pulseaudio,
-#custom-omarchy,
+#custom-shellos,
 #custom-screenrecording-indicator,
 #custom-update {
   min-width: 12px;
