@@ -13,7 +13,7 @@ pink    = '#ff79c6'
 blue    = '#6272a4'
 
 # ── prompt formats
-add_newline = false
+add_newline = "false"
 
 format = """
 ╭─ [$username](bg:color13 fg:color15)\
