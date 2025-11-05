@@ -1,32 +1,96 @@
-add_newline = true
-command_timeout = 200
-format = "[$directory$git_branch$git_status]($style)$character"
+# ── palette (Dracula-ish)
+[palettes.custom]
+color13 = '#390c00'
+color15 = '#f1dfda'
+color10 = '#ffb59d'
+cyan    = '#8be9fd'
+red     = '#ff5555'
+green   = '#50fa7b'
+orange  = '#ffb86c'
+pink    = '#ff79c6'
+blue    = '#6272a4'
 
-[character]
-error_symbol = "[✗](bold cyan)"
-success_symbol = "[❯](bold cyan)"
+# ── format for the whole prompt
+format = """
+╭─ [$username](bg:color13 fg:color15)\
+([$root](bg:color13 fg:red)\
+[$os](bg:color13 fg:color15) )\
+[$path](bg:color10 fg:color13)\
+[$git_branch$git_status](fg:color13)\
+\n╰─ ❯❯ """
+
+right_format = """[$nodejs](bg:green fg:color13)\
+[$python](bg:green fg:color13)\
+[$java](bg:pink fg:color13)\
+[$php](bg:blue fg:color15)\
+[$npm](bg:red fg:color13)\
+[$pnpm](bg:orange fg:color13)"""
+
+add_newline = false
+
+# ── segments
+[username]
+style_user  = 'bg:color13 fg:color15'
+style_root  = 'bg:color13 fg:red'
+format      = '[ $user ]($style)'
+
+[os]
+format = '[ $symbol ]($style)'
+style  = 'bg:color13 fg:color15'
+symbols = { Windows = "🪟", Linux = "🐧", Darwin = "🍎" }
 
 [directory]
-truncation_length = 2
-truncation_symbol = "…/"
-repo_root_style = "bold cyan"
-repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
+style = 'bg:color10 fg:color13'
+format = '[ $path ]($style)'
+truncation_length = 0   # always full path
 
 [git_branch]
-format = "[$branch]($style) "
-style = "italic cyan"
+symbol = ""
+format = '[ $branch ]($style)'
+style  = 'fg:color13'
 
 [git_status]
-format     = '[$all_status]($style)'
-style      = "cyan"
-ahead      = "⇡${count} "
-diverged   = "⇕⇡${ahead_count}⇣${behind_count} "
-behind     = "⇣${count} "
-conflicted = " "
-up_to_date = " "
-untracked  = "? "
-modified   = " "
-stashed    = ""
-staged     = ""
-renamed    = ""
-deleted    = ""
+ahead  = ' ⇡$count'
+behind = ' ⇣$count'
+modified = '*'
+stashed = ''
+format = '[ $ahead$behind$modified ](fg:cyan)'
+
+[c]
+format = '[  ($version) ]($style)'
+style = "bg:cyan fg:color13"
+
+[rust]
+format = '[ ($version) ]($style)'
+style = "bg:red fg:color13"
+
+[nodejs]
+format = '[ $version]($style)'
+style  = 'bg:green fg:color13'
+
+[python]
+format = '[ $version]($style)'
+style  = 'bg:green fg:color13'
+
+[java]
+format = '[ $version]($style)'
+style  = 'bg:pink fg:color13'
+
+[php]
+format = '[ $version]($style)'
+style  = 'bg:blue fg:color15'
+
+[npm]
+format = '[ $version]($style)'
+style  = 'bg:red fg:color13'
+detect_files = ['package-lock.json']
+
+[pnpm]
+format = '[󰋁 $version]($style)'
+style  = 'bg:orange fg:color13'
+detect_files = ['pnpm-lock.yaml']
+
+# ── prompt character
+[character]
+success_symbol = '[❯❯](bold color15)'
+error_symbol   = '[❯❯](bold red)'

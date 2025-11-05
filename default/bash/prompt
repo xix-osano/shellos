@@ -3,5 +3,41 @@ force_color_prompt=yes
 color_prompt=yes
 
 # Simple prompt with path in the window/pane title and caret for typing line
-PS1=$'\uf0a9 '
-PS1="\[\e]0;\w\a\]$PS1"
+#PS1=$'\uf0a9 '
+#PS1="\[\e]0;\w\a\]$PS1"
+
+# Dracula-ish colours
+P0='\[\e[38;5;232m\]'   # almost black
+P13='\[\e[38;5;52m\]'   # dark red-brown
+P15='\[\e[38;5;230m\]'  # light cream
+P10='\[\e[38;5;216m\]'  # pale orange
+MAGENTA='\[\e[35m\]'
+RED='\[\e[31m\]'
+CYAN='\[\e[36m\]'
+RESET='\[\e[0m\]'
+
+# ── helpers
+__git_info(){
+  local b="$(git symbolic-ref --short HEAD 2>/dev/null)"
+  [[ -z $b ]] && return
+  local dirty="$(git status --porcelain 2>/dev/null)"
+  local ahead="$(git rev-list --count @{u}..HEAD 2>/dev/null)"
+  local behind="$(git rev-list --count HEAD..@{u} 2>/dev/null)"
+  local s=" $b"
+  [[ -n $dirty ]] && s+="*"
+  [[ $ahead -gt 0 ]] && s+="$CYAN⇡$RESET"
+  [[ $behind -gt 0 ]] && s+="$CYAN⇣$RESET"
+  echo " $s"
+}
+
+# ── build prompt
+PS1=""
+PS1+="\n"                                           # newline
+PS1+="$P15╭─$RESET"                                 # left top
+PS1+="$P13\u$RESET"                                 # username
+PS1+=" $P10\w$RESET"                                # full path
+PS1+='$(__git_info)'                                # git
+PS1+="\n"                                           # newline
+PS1+="$P15╰─ ❯❯$RESET "                             # prompt char
+PS1+="\[${RESET}\]"                                 # clean reset
+export PS1
