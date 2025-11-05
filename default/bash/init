@@ -7,6 +7,16 @@ if command -v starship &> /dev/null; then
   eval "$(starship init bash)"
 fi
 
+# --- Starship Integration with Fallback ---
+if command -v starship >/dev/null 2>&1; then
+    # Starship installed: use it
+    export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+    eval "$(starship init bash)"
+else
+    # No Starship: fallback to classic bash prompt
+    [[ -f "$SHELLOS_PATH/default/bash/prompt" ]] && source "$SHELLOS_PATH/default/bash/prompt"
+fi
+
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init bash)"
 fi

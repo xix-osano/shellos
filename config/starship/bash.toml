@@ -1,3 +1,5 @@
+# ~/.config/starship/bash.toml
+
 # ── palette (Dracula-ish)
 [palettes.custom]
 color13 = '#390c00'
@@ -10,89 +12,56 @@ orange  = '#ffb86c'
 pink    = '#ff79c6'
 blue    = '#6272a4'
 
-# ── format for the whole prompt
+# ── prompt formats
+add_newline = false
+
 format = """
 ╭─ [$username](bg:color13 fg:color15)\
-([$root](bg:color13 fg:red)\
-[$os](bg:color13 fg:color15) )\
-[$path](bg:color10 fg:color13)\
-[$git_branch$git_status](fg:color13)\
-\n╰─ ❯❯ """
+[$os](bg:color13 fg:color15)\
+[$directory](bg:color10 fg:color13)\
+$git_branch$git_status
+╰─ ❯❯ """
 
-right_format = """[$nodejs](bg:green fg:color13)\
-[$python](bg:green fg:color13)\
-[$java](bg:pink fg:color13)\
-[$php](bg:blue fg:color15)\
-[$npm](bg:red fg:color13)\
-[$pnpm](bg:orange fg:color13)"""
-
-add_newline = false
+right_format = """$nodejs$python$java"""
 
 # ── segments
 [username]
-style_user  = 'bg:color13 fg:color15'
-style_root  = 'bg:color13 fg:red'
-format      = '[ $user ]($style)'
+show_always = true
+format = "[ $user ]($style)"
+style = "bg:color13 fg:color15"
 
 [os]
-format = '[🐧]($style)'
-style  = 'bg:color13 fg:color15'
+format = "[🐧]($style)"
+style = "bg:color13 fg:color15"
 
 [directory]
-style = 'bg:color10 fg:color13'
-format = '[ $path ]($style)'
-truncation_length = 0   # always full path
+format = "[ $path ]($style)"
+style = "bg:color10 fg:color13"
+truncation_length = 0
 
 [git_branch]
 symbol = ""
-format = '[ $branch ]($style)'
-style  = 'fg:color13'
+format = "[ $branch ]($style)"
+style  = "fg:color13"
 
 [git_status]
-ahead  = ' ⇡$count'
-behind = ' ⇣$count'
-conflicted = " "
+ahead  = " ⇡$count"
+behind = " ⇣$count"
+modified = "*"
+untracked = "? "
 up_to_date = " "
-untracked  = "? "
-modified = '*'
-stashed = ''
-format = '[ $ahead$behind$modified ](fg:cyan)'
-
-[c]
-format = '[  ($version) ]($style)'
-style = "bg:cyan fg:color13"
-
-[rust]
-format = '[ ($version) ]($style)'
-style = "bg:red fg:color13"
+conflicted = " "
+format = "[$ahead$behind$modified]($style)"
+style = "fg:cyan"
 
 [nodejs]
-format = '[ $version]($style)'
-style  = 'bg:green fg:color13'
+format = "[ $version]($style)"
+style  = "bg:green fg:color13"
 
 [python]
-format = '[ $version]($style)'
-style  = 'bg:green fg:color13'
+format = "[ $version]($style)"
+style  = "bg:green fg:color13"
 
 [java]
-format = '[ $version]($style)'
-style  = 'bg:pink fg:color13'
-
-[php]
-format = '[ $version]($style)'
-style  = 'bg:blue fg:color15'
-
-[npm]
-format = '[ $version]($style)'
-style  = 'bg:red fg:color13'
-detect_files = ['package-lock.json']
-
-[pnpm]
-format = '[󰋁 $version]($style)'
-style  = 'bg:orange fg:color13'
-detect_files = ['pnpm-lock.yaml']
-
-# ── prompt character
-[character]
-success_symbol = '[❯❯](bold color15)'
-error_symbol   = '[❯❯](bold red)'
+format = "[ $version]($style)"
+style  = "bg:pink fg:color13"
