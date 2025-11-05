@@ -10,9 +10,26 @@ add_newline = false
 # $cmd_duration$username$hostname $directory $git_branch
 # $character
 # """
+
+# format = """
+# $cmd_duration 󰜥 $directory $git_branch
+# $character"""
+
+# ── format for the whole prompt
 format = """
-$cmd_duration 󰜥 $directory $git_branch
-$character"""
+╭─ [$username](bg:color13 fg:color15)\
+([$root](bg:color13 fg:red)\
+[$os](bg:color13 fg:color15) )\
+[$path](bg:color10 fg:color13)\
+[$git_branch$git_status](fg:color13)\
+\n╰─ ❯❯ """
+
+right_format = """[$nodejs](bg:green fg:color13)\
+[$python](bg:green fg:color13)\
+[$java](bg:pink fg:color13)\
+[$php](bg:blue fg:color15)\
+[$npm](bg:red fg:color13)\
+[$pnpm](bg:orange fg:color13)"""
 
 # Replace the "❯" symbol in the prompt with "➜"
 [character]                            # The name of the module we are configuring is "character"
