@@ -1,39 +1,7 @@
-# --- Dracula-ish Palette ---
-P0='\[\e[38;5;232m\]'
-P13='\[\e[38;5;52m\]'
-P15='\[\e[38;5;230m\]'
-P10='\[\e[38;5;216m\]'
-CYAN='\[\e[36m\]'
-RED='\[\e[31m\]'
-RESET='\[\e[0m\]'
+# Technicolor dreams
+force_color_prompt=yes
+color_prompt=yes
 
-# --- Faster Git Info Function ---
-__git_info() {
-  git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local status branch ahead behind dirty
-  read -r branch <<<"$(git symbolic-ref --short HEAD 2>/dev/null)"
-  status="$(git status --porcelain 2>/dev/null)"
-  dirty=$([[ -n "$status" ]] && echo "*")
-
-  ahead="$(git rev-list --count @{u}..HEAD 2>/dev/null || echo 0)"
-  behind="$(git rev-list --count HEAD..@{u} 2>/dev/null || echo 0)"
-
-  local arrows=""
-  (( ahead > 0 )) && arrows+="${CYAN}⇡${RESET}"
-  (( behind > 0 )) && arrows+="${CYAN}⇣${RESET}"
-
-  echo " ${branch}${dirty}${arrows}"
-}
-
-# --- Build Prompt ---
-PS1="\n"                        # Newline
-PS1+="${P15}╭─${RESET}"         # Left top corner
-PS1+="${P13}\u${RESET}"         # Username
-PS1+=" ${P10}\w${RESET}"        # Full path
-PS1+="\$(__git_info)"           # Git info
-PS1+="\n"                       # Newline
-PS1+="${P15}╰─ ❯❯${RESET} "     # Prompt character
-PS1+="\[${RESET}\]"             # Clean reset
-
-export PS1
+# Simple prompt with path in the window/pane title and caret for typing line
+#PS1=$'\uf0a9 '
+#PS1="\[\e]0;\w\a\]$PS1"
