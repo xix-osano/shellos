@@ -17,9 +17,6 @@ ln -snf ~/.config/shellos/current/theme/backgrounds/1-scenery-pink-lakeside-suns
 mkdir -p ~/.config/btop/themes
 ln -snf ~/.config/shellos/current/theme/btop.theme ~/.config/btop/themes/current.theme
 
-mkdir -p ~/.config/mako
-ln -snf ~/.config/shellos/current/theme/mako.ini ~/.config/mako/config
-
 # Add managed policy directories for Chromium and Brave for theme changes
 sudo mkdir -p /etc/chromium/policies/managed
 sudo chmod a+rw /etc/chromium/policies/managed
