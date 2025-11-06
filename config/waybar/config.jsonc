@@ -91,7 +91,7 @@
   },
   "custom/notification": {
     "tooltip-format": "Left: Notifications\nRight: Do not disturb",
-    "format": "{icon}",
+    "format": "1",
     "format-icons": {
       "notification": "notifications_active",
       "none": "notifications",
