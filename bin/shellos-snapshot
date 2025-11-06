@@ -5,6 +5,9 @@
 COMMAND="$1"
 DESC="Snapshot $(date +'%Y-%m-%d %H:%M:%S')"
 SHELLOS_PATH=${SHELLOS_PATH:-$HOME/.local/share/shellos}
+LOG="/var/log/shellos-snapshot.log"
+
+log() { echo "[$(date +'%F %T')] $*" | sudo tee -a "$LOG" >/dev/null; }
 
 if [[ -z $COMMAND ]]; then
   echo "Usage: shellos-snapshot <create|restore>" >&2
@@ -20,12 +23,14 @@ fi
 case "$COMMAND" in
 create)
   echo -e "\e[1;32m==> Creating system snapshot...\e[0m"
-  
-  # Get existing snapper configs (usually 'root' and maybe 'home')
+  log "Starting snapshot creation"
+
+  # Detect configs (usually root & home)
   mapfile -t CONFIGS < <(snapper --csvout list-configs | awk -F, 'NR>1 {print $1}')
 
   for config in "${CONFIGS[@]}"; do
     echo "→ Creating snapshot for config: $config"
+    log "Creating snapshot for $config"
     sudo snapper -c "$config" create -c number -d "$DESC"
   done
 
@@ -33,9 +38,11 @@ create)
   if systemctl is-active --quiet grub-btrfsd.service; then
     echo "→ Updating GRUB snapshot entries..."
     sudo systemctl restart grub-btrfsd.service
+    log "Triggered grub-btrfsd restart"
   fi
 
   echo -e "\e[1;32mSnapshot created successfully. Boot menu updated.\e[0m"
+  log "Snapshots created successfully"
   ;;
 
 restore)
@@ -71,6 +78,7 @@ restore)
 
   SNAP_ID=$(echo "$CHOICE" | awk '{print $1}')
   echo -e "\e[1;33m→ Rolling back to snapshot #$SNAP_ID...\e[0m"
+  log "Selected snapshot $SNAP_ID for config $CONFIG"
 
   # Confirm
   if command -v gum &>/dev/null; then
@@ -82,8 +90,22 @@ restore)
 
   # Execute rollback
   sudo snapper -c "$CONFIG" rollback "$SNAP_ID"
+  log "snapper rollback executed for $CONFIG snapshot $SNAP_ID"
 
-  echo -e "\e[1;32mRollback complete. You may need to reboot.\e[0m"
+  # Set new rollback snapshot as default
+  NEW_ID=$(sudo btrfs subvolume get-default / | awk '{print $NF}')
+  echo "→ Setting subvolume $NEW_ID as default..."
+  sudo btrfs subvolume set-default "$NEW_ID" /
+  log "Set Btrfs default subvolume to $NEW_ID"
+
+  echo "→ Rebuilding initramfs & updating GRUB..."
+  sudo mkinitcpio -P
+  sudo grub-mkconfig -o /boot/grub/grub.cfg
+  log "Rebuilt initramfs + grub config"
+
+  echo -e "\e[1;32mRollback complete.\e[0m"
+  echo "Reboot to apply changes."
+  log "Rollback finished successfully"
   ;;
 
 *)
