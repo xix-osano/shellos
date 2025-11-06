@@ -1,7 +1,7 @@
 @import "../shellos/current/theme/waybar.css";
 
 * {
-  background-color: @background;
+  background-color: alpha(@background, 0);
   color: @foreground;
 
   border: none;
@@ -13,10 +13,12 @@
 
 .modules-left {
   margin-left: 8px;
+  background-color: alpha(@background, 1);
 }
 
 .modules-right {
   margin-right: 8px;
+  background-color: alpha(@background, 1);
 }
 
 #workspaces button {
@@ -27,7 +29,7 @@
 }
 
 #workspaces button.empty {
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
 #cpu,
@@ -54,6 +56,7 @@
 
 #custom-expand-icon {
   margin-right: 20px;
+  padding-left: 10px;
 }
 
 tooltip {
@@ -66,6 +69,9 @@ tooltip {
 
 #clock {
   margin-left: 8.75px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: alpha(@background, 1);
 }
 
 .hidden {
@@ -79,5 +85,57 @@ tooltip {
 }
 
 #custom-screenrecording-indicator.active {
-  color: #a55555;
+  color: #ff0000;
+}
+
+#custom-notification {
+  margin-right: 10px;
+  padding-left: 10px;
+}
+
+.audio-slider {
+  padding: 0 10px;
+}
+
+slider {
+  min-width: 120px;
+  min-height: 12px;
+  border-radius: 6px;
+}
+
+slider trough {
+  min-width: 120px;
+  min-height: 12px;
+  background-color: #444;
+  border-radius: 6px;
+}
+
+slider highlight {
+  min-height: 12px;
+  background-color: #eee;
+  border-radius: 6px;
+}
+
+window#waybar {
+  margin-top: 20px;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0);
+}
+
+#custom-cava {
+  font-size: 9px;
+  margin-right: 10px;
+  font-family: "CaskaydiaCove Nerd Font";
+}
+
+#custom-spotify {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+/* Fully collapse hidden Spotify module so it doesn't occupy space */
+#custom-spotify.hidden {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
 }
