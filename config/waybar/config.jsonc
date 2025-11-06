@@ -7,12 +7,12 @@
   "margin": 6,
   "modules-left": [
     "custom/shellos", 
-    "clock",
+    "hyprland/workspaces", 
     "custom/spotify",
     "custom/cava"
   ],
   "modules-center": [
-    "hyprland/workspaces", 
+    "clock",
     "custom/update", 
     "custom/screenrecording-indicator"
   ],
@@ -150,7 +150,7 @@
   },
   "pulseaudio": {
     "format": "{icon}",
-    "on-click": "xdg-terminal-exec --app-id=com.shellos.Wiremix -e wiremix",
+    "on-click": "$TERMINAL --class=Wiremix -e wiremix",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,

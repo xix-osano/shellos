@@ -37,7 +37,7 @@ menu() {
 }
 
 terminal() {
-  xdg-terminal-exec --app-id=com.shellos.Shellos "$@"
+  alacritty --class=Shellos -e "$@"
 }
 
 present_terminal() {
@@ -177,7 +177,7 @@ show_setup_menu() {
   options="$options\n  Defaults\n󰱔  DNS\n  Security\n  Config"
 
   case $(menu "Setup" "$options") in
-  *Audio*) xdg-terminal-exec --app-id=com.shellos.Wiremix -e wiremix ;;
+  *Audio*) $TERMINAL --class=Wiremix -e wiremix ;;
   *Wifi*)
     rfkill unblock wifi
     shellos-launch-wifi

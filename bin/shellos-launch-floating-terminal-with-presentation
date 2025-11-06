@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cmd="$*"
-exec setsid uwsm-app -- xdg-terminal-exec --app-id=com.shellos.Shellos --title=Shellos -e bash -c "shellos-show-logo; $cmd; shellos-show-done"
+exec setsid uwsm-app -- xdg-terminal-exec --class=Shellos  --title=Shellos -e bash -c "shellos-show-logo; $cmd; shellos-show-done"
