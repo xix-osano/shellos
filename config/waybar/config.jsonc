@@ -91,16 +91,20 @@
   },
   "custom/notification": {
     "tooltip-format": "Left: Notifications\nRight: Do not disturb",
-    "format": "1",
+    "format": "{icon}",
     "format-icons": {
-      "notification": "notifications_active",
-      "none": "notifications",
-      "dnd-notification": "notifications_active",
-      "dnd-none": "notifications_paused",
-      "inhibited-notification": "notification_important",
-      "inhibited-none": "notification_important",
-      "dnd-inhibited-notification": "notification_off",
-      "dnd-inhibited-none": "notifications_off"
+        "email-notification": "<span foreground='white'><sup></sup></span>",
+        "chat-notification": "󱋊<span foreground='white'><sup></sup></span>",
+        "warning-notification": "󱨪<span foreground='yellow'><sup></sup></span>",
+        "error-notification": "󱨪<span foreground='red'><sup></sup></span>",
+        "network-notification": "󱂇<span foreground='white'><sup></sup></span>",
+        "battery-notification": "󰁺<span foreground='white'><sup></sup></span>",
+        "update-notification": "󰚰<span foreground='white'><sup></sup></span>",
+        "music-notification": "󰝚<span foreground='white'><sup></sup></span>",
+        "volume-notification": "󰕿<span foreground='white'><sup></sup></span>",
+        "notification": "<span foreground='white'><sup></sup></span>",
+        "dnd": "",
+        "none": ""
     },
     "return-type": "json",
     "exec-if": "which swaync-client",
@@ -150,7 +154,7 @@
   },
   "pulseaudio": {
     "format": "{icon}",
-    "on-click": "$TERMINAL --class=Wiremix -e wiremix",
+    "on-click": "xdg-terminal-exec --class=Wiremix -e wiremix",
     "on-click-right": "pamixer -t",
     "tooltip-format": "Playing at {volume}%",
     "scroll-step": 5,
