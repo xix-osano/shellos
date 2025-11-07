@@ -38,3 +38,23 @@ xdg-mime default mpv.desktop application/ogg
 xdg-mime default org.gnome.Nautilus.desktop inode/directory
 xdg-mime default org.gnome.Nautilus.desktop application/x-gnome-saved-search
 xdg-mime default org.gnome.Nautilus.desktop application/vnd.google-apps.folder
+
+
+# Open text files with nvim
+xdg-mime default nvim.desktop text/plain
+xdg-mime default nvim.desktop text/english
+xdg-mime default nvim.desktop text/x-makefile
+xdg-mime default nvim.desktop text/x-c++hdr
+xdg-mime default nvim.desktop text/x-c++src
+xdg-mime default nvim.desktop text/x-chdr
+xdg-mime default nvim.desktop text/x-csrc
+xdg-mime default nvim.desktop text/x-java
+xdg-mime default nvim.desktop text/x-moc
+xdg-mime default nvim.desktop text/x-pascal
+xdg-mime default nvim.desktop text/x-tcl
+xdg-mime default nvim.desktop text/x-tex
+xdg-mime default nvim.desktop application/x-shellscript
+xdg-mime default nvim.desktop text/x-c
+xdg-mime default nvim.desktop text/x-c++
+xdg-mime default nvim.desktop application/xml
+xdg-mime default nvim.desktop text/xml

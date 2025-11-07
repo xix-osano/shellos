@@ -21,3 +21,4 @@ if [[ -n "$BATTERY_LEVEL" && "$BATTERY_LEVEL" =~ ^[0-9]+$ ]]; then
     rm -f $NOTIFICATION_FLAG
   fi
 fi
+

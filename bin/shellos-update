@@ -8,3 +8,24 @@ shellos-update-confirm
 shellos-snapshot create || [ $? -eq 127 ]
 shellos-update-git
 shellos-update-perform
+
+#!/bin/bash
+
+set -e
+
+trap 'echo ""; echo -e "\033[0;31mSomething went wrong during the update!\n\nPlease review the output above carefully, correct the error, and retry the update.\n"' ERR
+
+gum style --border normal --border-foreground 6 --padding "1 2" \
+  "Ready to update Shellos?" \
+  "" \
+  "• You cannot stop the update once you start!" \
+  "• Make sure you're connected to power or have a full battery"
+
+if ! gum confirm --default=false "Continue with update?"; then
+  echo "Update cancelled"
+  exit 0
+fi
+
+shellos-snapshot create || [ $? -eq 127 ]
+shellos-update-git
+shellos-update-perform
