@@ -117,12 +117,6 @@ window#waybar {
   background: rgba(0, 0, 0, 0);
 }
 
-#custom-cava {
-  font-size: 9px;
-  margin-right: 10px;
-  font-family: "CaskaydiaCove Nerd Font";
-}
-
 #custom-spotify {
   margin-right: 10px;
   margin-left: 10px;

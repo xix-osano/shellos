@@ -8,8 +8,7 @@
   "modules-left": [
     "custom/shellos", 
     "hyprland/workspaces", 
-    "custom/spotify",
-    "custom/cava"
+    "custom/spotify"
   ],
   "modules-center": [
     "clock",
@@ -75,11 +74,6 @@
     "format-alt": "{:L%d %B W%V %Y}",
     "tooltip": false,
     "on-click-right": "shellos-launch-floating-terminal-with-presentation shellos-tz-select"
-  },
-  "custom/cava": {
-    "format": "{}",
-    "exec": "$SHELLOS_PATH/default/waybar/scripts/cava.sh||echo \"\"",
-    "return-type": "text"
   },
   "custom/spotify": {
     "exec": "sh -lc \"playerctl -p spotify metadata --format '  {{ artist }} - {{ title }}' 2>/dev/null || echo ''\"",

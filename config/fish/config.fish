@@ -14,7 +14,6 @@ if status is-interactive # Commands to run in interactive sessions can go here
     set fish_greeting
 
     # Use starship
-    set -x STARSHIP_CONFIG ~/.config/starship/fish.toml
     starship init fish | source
 
     # Aliases
