@@ -30,7 +30,7 @@ fi
 shellos-restart-swayosd
 hyprctl reload
 pkill -SIGUSR2 btop
-swaync-client -rs
+makoctl reload
 
 # Change gnome, browser, vscode, cursor themes
 shellos-theme-set-terminal

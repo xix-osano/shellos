@@ -18,11 +18,11 @@
   ],
   "modules-right": [
     "group/tray-expander",
+    "hyprland/window",
     "bluetooth",
     "network",
     "pulseaudio",
     "cpu",
-    "custom/notification",
     "battery"
   ],
   "hyprland/workspaces": {
@@ -50,8 +50,27 @@
       "6": []
     }
   },
+  "hyprland/window": {
+      "format": "  {}",
+      "separate-outputs": true,
+      "rewrite": {
+          "(.*)${USER}@${set_sysname}:(.*)": "$1  :$2",
+          "(.*) — Mozilla Firefox": "$1 󰈹",
+          "(.*)Mozilla Firefox": "$1 Firefox 󰈹",
+          "(.*) - Visual Studio Code": "$1 󰨞",
+          "(.*)Visual Studio Code": "$1 Code 󰨞",
+          "(.*) — Nautilus": "$1 󰉋",
+          "(.*)Spotify.*": "$1 Spotify 󰓇",
+          "(.*)Steam": "$1 Steam 󰓓",
+          "(.*) - Discord": "$1  ",
+          "(.*?)-\\s*YouTube(.*)": "$1󰗃", 
+          "(.*?\\s)YouTube(.*)": "$1YouTube 󰗃"
+      },
+      "max-length": 50
+  },
   "custom/shellos": {
-    "format": "<span font='shellos'>\ue900</span>",
+    //"format": "<span font='shellos'>\ue900</span>",
+    "format": " ",
     "on-click": "shellos-menu",
     "on-click-right": "xdg-terminal-exec",
     "tooltip-format": "Shellos Menu\n\nSuper + Alt + Space"
@@ -89,29 +108,6 @@
     "interval": 1,
     "on-click": "playerctl play-pause --player=spotify"
   },
-  "custom/notification": {
-    "tooltip-format": "Left: Notifications\nRight: Do not disturb",
-    "format": "{icon}",
-    "format-icons": {
-        "email-notification": "<span foreground='white'><sup></sup></span>",
-        "chat-notification": "󱋊<span foreground='white'><sup></sup></span>",
-        "warning-notification": "󱨪<span foreground='yellow'><sup></sup></span>",
-        "error-notification": "󱨪<span foreground='red'><sup></sup></span>",
-        "network-notification": "󱂇<span foreground='white'><sup></sup></span>",
-        "battery-notification": "󰁺<span foreground='white'><sup></sup></span>",
-        "update-notification": "󰚰<span foreground='white'><sup></sup></span>",
-        "music-notification": "󰝚<span foreground='white'><sup></sup></span>",
-        "volume-notification": "󰕿<span foreground='white'><sup></sup></span>",
-        "notification": "<span foreground='white'><sup></sup></span>",
-        "dnd-notification": "",
-        "none": ""
-    },
-    "return-type": "json",
-    "exec-if": "which swaync-client",
-    "exec": "swaync-client -swb",
-    "on-click": "swaync-client -t -sw",
-    "escape": true
-  },
   "network": {
     "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     "format": "{icon}",
@@ -130,6 +126,7 @@
     "format-discharging": "{icon} {capacity}%",
     "format-charging": "{icon} {capacity}%",
     "format-plugged": " {capacity}%",
+    "format-alt": "{icon}  {time}",
     "format-icons": {
       "charging": ["󱐌", "󱐌", "󱐌", "󱐌", " 󱐋"],
       "default": ["", "", "", " "]
@@ -137,7 +134,7 @@
     "format-full": " 󱐋",
     "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}%",
     "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
-    "interval": 5,
+    "interval": 1,
     "on-click": "shellos-menu power",
     "states": {
       "warning": 20,
@@ -159,7 +156,17 @@
     "scroll-step": 5,
     "format-muted": "",
     "format-icons": {
-      "default": ["", "", ""]
+      "headphone": " ",
+      "hands-free": " ",
+      "headset": " ",
+      "phone": " ",
+      "portable": " ",
+      "car": " ",
+      "default": [
+        "",
+        "",
+        ""
+      ]
     }
   },
   "group/tray-expander": {

@@ -64,6 +64,7 @@ libreoffice
 llvm
 localsend
 luarocks
+mako
 man
 mariadb-libs
 matugen
@@ -104,7 +105,6 @@ starship
 sushi
 swaybg
 swayosd
-swaync
 system-config-printer
 tldr
 tree-sitter-cli
