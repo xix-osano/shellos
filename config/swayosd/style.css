@@ -1,7 +1,7 @@
 @import "../shellos/current/theme/swayosd.css";
 
 window {
-  border-radius: 0;
+  border-radius: 10px;
   opacity: 0.97;
   border: 2px solid @border-color;
 
