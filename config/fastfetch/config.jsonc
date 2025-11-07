@@ -64,48 +64,48 @@
     {
       "type": "command",
       "key": "\ue900 OS",
-      "keyColor": "blue",
+      "keyColor": "cyan",
       "text": "version=$(shellos-version); echo \"Shellos $version\""
     },
     {
       "type": "kernel",
       "key": "│ ├",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "wm",
       "key": "│ ├",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "de",
       "key": " DE",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "terminal",
       "key": "│ ├",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "shell",
       "key": "│ ├",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "terminalfont",
       "key": "│ ├",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "packages",
       "key": "└ └󰏖",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "wmtheme",
       "key": "└ └󰉼",
-      "keyColor": "blue"
+      "keyColor": "cyan"
     },
     {
       "type": "custom",
